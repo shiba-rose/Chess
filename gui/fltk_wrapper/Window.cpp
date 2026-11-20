@@ -2,10 +2,10 @@
 
 namespace Graph_lib {
 
-Window::Window(int ww, int hh, const std::string& title) : Fl_Window{ww, hh, title.c_str()}, w{ww}, h{hh} { init(); }
+Window::Window(int ww, int hh, const std::string& title) : Fl_Window{ww, hh, title.c_str()}  { init(); }
 
 Window::Window(Point xy, int ww, int hh, const std::string& title)
-    : Fl_Window{xy.x, xy.y, ww, hh, title.c_str()}, w{ww}, h{hh}
+    : Fl_Window{xy.x, xy.y, ww, hh, title.c_str()} 
 {
   init();
 }
@@ -13,7 +13,24 @@ Window::Window(Point xy, int ww, int hh, const std::string& title)
 void Window::init()
 {
   resizable(this);
+  size_range(320, 320);
   show();
+}
+
+
+ int Window::handle(int event)  
+{
+    const int base_result = Fl_Window::handle(event);
+    if (base_result != 0) {
+        return base_result;
+    }
+
+    if (event == FL_PUSH) {
+        on_click(Point(Fl::event_x(),Fl::event_y()), Fl::event_button());
+        return 1;
+    }
+
+    return 0;
 }
 
 //----------------------------------------------------

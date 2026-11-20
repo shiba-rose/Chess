@@ -7,6 +7,7 @@
 
 #include "Graph.h"
 #include "Window.h"
+#include "Resizable_window.h"
 
 namespace Graph_lib {
 

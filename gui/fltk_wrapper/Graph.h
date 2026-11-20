@@ -66,6 +66,11 @@ struct Color
 
   void set_visibility (Transparency vv) { v = vv; }
 
+  static Color rgb(unsigned char r, unsigned char g, unsigned char b)
+  {
+    return Color(fl_rgb_color(r, g, b));
+  }
+
 private:
   Fl_Color c;
   unsigned char v;  // 0 or 1 for now
