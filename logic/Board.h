@@ -23,3 +23,4 @@ private:
     
     std::array<Figure, 64> cells_;
 };
+

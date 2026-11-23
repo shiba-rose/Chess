@@ -11,6 +11,7 @@ add_library(chess_logic STATIC
     Analyzer.cpp 
     Game.cpp 
     History.cpp
+    BoardManipulator.cpp
 )
 target_include_directories(chess_logic PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 

@@ -29,7 +29,7 @@ const History& Game::history() const
     return history_;
 }
 
-void Game::set_history(const std::vector<Move> history)
+void Game::set_history(const std::vector<MoveRec> history)
 {
     history_.set_history(history);
 }

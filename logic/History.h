@@ -11,9 +11,9 @@ class History
 public:
 
     // для тестов
-    void set_history(const std::vector<Move>& moves);
+    void set_history(const std::vector<MoveRec>& moves);
 
-    Move get_last_move() const;
+    MoveRec get_last_move() const;
 private:
-    std::vector<Move> moves_;
+    std::vector<MoveRec> moves_;
 };

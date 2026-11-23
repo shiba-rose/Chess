@@ -18,7 +18,7 @@ public:
 
     // временный метод
 
-    void set_history(const std::vector<Move> history);
+    void set_history(const std::vector<MoveRec> history);
 
     // методы возвращающие константные ссылки
     const Board& board() const;
