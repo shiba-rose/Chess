@@ -30,7 +30,7 @@ add_executable(
     gui/fltk_wrapper/Resizable_window.cpp
 
     gui/BoardView.cpp
-    gui/MainWindow.cpp
+    gui/GameWindow.cpp
     gui/PromotionDialog.cpp
     gui/StatusPanel.cpp
 )

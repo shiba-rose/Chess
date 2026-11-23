@@ -20,26 +20,19 @@ public:
   Window(int w, int h, const std::string& title);            // let the system pick the location
   Window(Point xy, int w, int h, const std::string& title);  // top left corner in xy
 
-  virtual ~Window() = default;
+  virtual ~Window() {}
 
-  int x_max () const { return Fl_Widget::w(); }
+  int x_max () const { return w; }
 
-  int y_max () const { return Fl_Widget::h(); }
+  int y_max () const { return h; }
 
   void resize (int ww, int hh)
   {
+    w = ww, h = hh;
     size(ww, hh);
   }
 
-  void resize (int x, int y, int w, int h) override
-  {
-    Fl_Window::resize(x, y, w, h);
-    on_resize(w,h);
-  }
-
-  int handle(int event) override;
-
-  void set_label (const std::string& s) { copy_label(s.c_str()); }
+  void set_label (const std::string& s) { label(s.c_str()); }
 
   void attach (Shape& s);
   void attach (Widget& w);
@@ -51,11 +44,10 @@ public:
 
 protected:
   void draw ();
-  virtual void on_resize( int new_w,  int new_h) {}
-  virtual void on_click( Point point, int button_number) {}
 
 private:
   std::vector<Shape*> shapes;  // shapes attached to window
+  int w, h;                    // window size
 
   void init ();
 };

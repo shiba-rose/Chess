@@ -453,7 +453,8 @@ struct Suffix
     png,
     jpg,
     gif,
-    bmp
+    bmp, 
+    svg
   };
 };
 
@@ -473,6 +474,16 @@ struct Image : Shape
     h = hh;
     cx = xy.x;
     cy = xy.y;
+  }
+
+  void set_size(int ww, int hh)
+  {
+    p->scale(ww, hh, 0, 1);  
+  }
+
+  void set_position(Point p)
+  {
+    set_point(0, p);
   }
 
   void move (int dx, int dy) override

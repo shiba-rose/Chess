@@ -1,6 +1,7 @@
 #include "Resizable_window.h"
 
-namespace Graph_lib {
+namespace Graph_lib 
+{
 
 Resizable_window::Resizable_window(Point xy, int w, int h, const std::string& title, int min_w, int min_h)
     : Window{xy, w, h, title}

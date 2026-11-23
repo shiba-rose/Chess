@@ -359,6 +359,8 @@ int init_suffix_map ()
   suffix_map["GIF"] = Suffix::gif;
   suffix_map["bmp"] = Suffix::bmp;
   suffix_map["BMP"] = Suffix::bmp;
+  suffix_map["svg"] = Suffix::svg;
+  suffix_map["SVG"] = Suffix::svg;
   return 0;
 }
 
@@ -367,11 +369,11 @@ Suffix::Encoding get_encoding (const std::string& s)
 {
   [[maybe_unused]] static int x = init_suffix_map();
 
-  std::string::const_iterator p = std::find(s.begin(), s.end(), '.');
-  if (p == s.end())
+  std::size_t p = s.rfind('.');
+  if (p == std::string::npos)
     return Suffix::none;  // no suffix
 
-  std::string suf{p + 1, s.end()};
+  std::string suf = s.substr(p + 1);
   return suffix_map[suf];
 }
 
@@ -407,6 +409,9 @@ Image::Image(Point xy, const std::string& s, Suffix::Encoding e) : w{0}, h{0}, f
     break;
   case Suffix::gif:
     p = new Fl_GIF_Image{s.c_str()};
+    break;
+  case Suffix::svg:
+    p = new Fl_SVG_Image{s.c_str()};
     break;
   default:  // Unsupported image encoding
     fn.set_label("unsupported file type \"" + s + '\"');
