@@ -33,9 +33,6 @@ enum class FigureType { None, Pawn, Knight, Bishop, Rook, Queen, King };
 struct Figure {
     FigureType type  = FigureType::None;
     Color      color = Color::White;           // при None игнорируется
-    bool is_empty() const { return type == FigureType::None; }
-    // Позволяет сделать проверку пустой клетки более читаемой
-    // game.board().at(Coord).is_empty()
 };
 
 enum class GameStatus { InProgress, Checkmate, Stalemate, Draw };

@@ -16,10 +16,10 @@ Board::Board()
 
     for (int i = 0; i < 8; ++i)
     {
-        cells_[i] = Figure {back_rank[i], Color::Black};
-        cells_[i+8] = Figure {FigureType::Pawn, Color::Black};
-        cells_[i+56] = Figure {back_rank[i], Color::White};
-        cells_[i+48] = Figure {FigureType::Pawn, Color::White};
+        cells_[i] = Cell{Figure {back_rank[i], Color::Black}};
+        cells_[i+8] = Cell{Figure {FigureType::Pawn, Color::Black}};
+        cells_[i+56] = Cell{Figure {back_rank[i], Color::White}};
+        cells_[i+48] = Cell{Figure {FigureType::Pawn, Color::White}};
     }
 }
 
@@ -46,31 +46,31 @@ bool Board::is_inside(int index)
     return 0 <= index && index < 64;
 }
 
-Figure Board::at(Coord c) const
+Cell Board::at(Coord c) const
 {
     return cells_[get_index(c)];
 }
 
 void Board::delete_figure(Coord c)
 {
-    cells_[get_index(c)] = Figure {
+    cells_[get_index(c)] = Cell{Figure {
         FigureType::None, Color::White
-    };
+    }};
 }
 
 void Board::add_figure(Coord c, Figure figure)
 {
-    cells_[get_index(c)] = figure;
+    cells_[get_index(c)] = Cell{figure};
 }
 
 void Board::clear()
 {
-    cells_.fill(Figure {
+    cells_.fill(Cell{Figure {
         FigureType::None, Color::White
-    });
+    }});
 }
 
-const std::array<Figure, 64>& Board::cells() const
+const std::array<Cell, 64>& Board::cells() const
 {
     return cells_;
 }

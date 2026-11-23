@@ -48,7 +48,7 @@ MoveResult Game::try_move(
     // проверка наличия фиугры
     assert(!board_.at(from).is_empty());
     // Проверка на то что превращается именно пешка
-    assert((promotion != FigureType::None) ? board_.at(from).type == FigureType::Pawn : 1);
+    assert((promotion != FigureType::None) ? board_.at(from).figure.type == FigureType::Pawn : 1);
     // Проверка можеть ли эта пешка превратиться по позиции ( стоит на пред последнем ряду )
     assert((promotion != FigureType::None) ? ((state_.current_move == Color::White) ? to.row == 0 : to.row == 7 ) : 1);
 
@@ -63,13 +63,13 @@ MoveResult Game::try_move(
 
     std::vector<Coord> changed_cells {from, to};
 
-    Figure added_figure = board_.at(from);
+    Figure added_figure = board_.at(from).figure;
 
     if (promotion != FigureType::None)
     {
         added_figure = Figure {promotion, state_.current_move};
     } else if (
-        board_.at(from).type == FigureType::Pawn &&
+        board_.at(from).figure.type == FigureType::Pawn &&
         (to.row == ((state_.current_move == Color::Black) * 7))
     )
     {
@@ -78,7 +78,7 @@ MoveResult Game::try_move(
 
     if (!board_.at(to).is_empty())
     {
-        state_.captured_figures.push_back(board_.at(to));
+        state_.captured_figures.push_back(board_.at(to).figure);
     }
 
     board_.delete_figure(from);
@@ -105,10 +105,11 @@ std::vector<Coord> Game::legal_moves_from(Coord from) const
     // проверка окончания партии
     assert(state_.status == GameStatus::InProgress);
 
-    Figure figure = board_.at(from);
+    Cell cell = board_.at(from);
+    Figure figure = cell.figure;
 
     // проверка наличия фигуры
-    assert(!figure.is_empty());
+    assert(!cell.is_empty());
     // проверка цвета фигры
     assert(figure.color == state_.current_move);
 
@@ -124,7 +125,7 @@ std::vector<Coord> Game::legal_moves_from(Coord from) const
         if (
             Board::is_inside(prev_coord) &&
             (board_.at(prev_coord).is_empty() ||
-             board_.at(prev_coord).color != state_.current_move)
+             board_.at(prev_coord).figure.color != state_.current_move)
         )
         {
             prev_ans.push_back(prev_coord);
@@ -138,7 +139,7 @@ std::vector<Coord> Game::legal_moves_from(Coord from) const
         if (
             Board::is_inside(prev_coord) && 
             (board_.at(prev_coord).is_empty() ||
-             board_.at(prev_coord).color != state_.current_move)
+             board_.at(prev_coord).figure.color != state_.current_move)
         )
         {
             prev_ans.push_back(prev_coord);

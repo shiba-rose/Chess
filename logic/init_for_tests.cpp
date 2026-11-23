@@ -23,12 +23,17 @@ static bool is_fig(Figure f, FigureType t, Color c)
     return f.type == t && f.color == c;
 }
 
+static bool is_fig(const Cell& cell, FigureType t, Color c)
+{
+    return !cell.is_empty() && is_fig(cell.figure, t, c);
+}
+
 static bool contains(const std::vector<Coord>& v, Coord c)
 {
     return std::find(v.begin(), v.end(), c) != v.end();
 }
 
-// Пустая доска с двумя королями в углах, чтобы позиция была "настоящей"
+// Пустая доска с двумя королями в углах
 static Board board_with_kings()
 {
     Board b;
@@ -36,6 +41,27 @@ static Board board_with_kings()
     b.add_figure({7, 0}, {FigureType::King, Color::White});
     b.add_figure({0, 7}, {FigureType::King, Color::Black});
     return b;
+}
+
+static void test_board_size_and_clear()
+{
+    Board b;
+    CHECK(b.cells().size() == 64);
+
+    b.clear();
+    CHECK(b.cells().size() == 64);          // clear не должен менять размер
+    for (const Cell& c : b.cells())
+        CHECK(c.is_empty());
+}
+
+static void test_board_copy_is_independent()
+{
+    Board a;
+    Board b = a;                            // копия
+    b.delete_figure({7, 4});                // меняем только копию
+
+    CHECK(is_fig(a.at({7, 4}), FigureType::King, Color::White));
+    CHECK(b.at({7, 4}).is_empty());
 }
 
 static void test_initial_position()
@@ -50,8 +76,8 @@ static void test_initial_position()
     CHECK(g.board().at({4, 4}).is_empty());
 
     int count = 0;
-    for (const Figure& f : g.board().cells())
-        if (!f.is_empty()) ++count;
+    for (const Cell& c : g.board().cells())
+        if (!c.is_empty()) ++count;
     CHECK(count == 32);
 
     CHECK(g.state().current_move == Color::White);
@@ -103,7 +129,7 @@ static void test_impossible_changes_nothing()
     CHECK(r.outcome == Outcome::Impossible);
     CHECK(r.changed_cells.empty());
     CHECK(is_fig(g.board().at({6, 4}), FigureType::Pawn, Color::White));
-    CHECK(g.board().at({6, 5}).type == FigureType::Pawn);   // соседняя пешка на месте
+    CHECK(is_fig(g.board().at({6, 5}), FigureType::Pawn, Color::White));   // соседняя пешка на месте
     CHECK(g.state().current_move == Color::White);
     CHECK(g.state().ply_count == 0);
 }
@@ -181,6 +207,8 @@ static void test_draw_by_ply_limit()
 
 int main()
 {
+    test_board_size_and_clear();
+    test_board_copy_is_independent();
     test_initial_position();
     test_legal_moves();
     test_simple_moves_and_turn();
